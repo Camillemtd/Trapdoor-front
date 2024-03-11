@@ -1,6 +1,6 @@
 'use client';
 
-import { OrbitControls, Environment, SpotLight, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls, Environment, SpotLight, PerspectiveCamera, Text3D } from "@react-three/drei";
 import Box from "./Box";
 export default function Experience() {
 	  return (

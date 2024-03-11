@@ -3,20 +3,22 @@ import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 
 // Three.js
-import { Mesh } from "three";
-import { useTexture } from "@react-three/drei";
+import { Html, useTexture } from "@react-three/drei";
 import { DoubleSide } from "three";
 import * as THREE from "three";
 import { Vector3 } from "@react-three/fiber";
 
+import useReadContract from "@/hooks/useReadContract";
+
 export default function Box({ box }: { box: string }) {
   // State
-  const [isTrapOpen, setIsTrapOpen] = useState(false);
+//   const [isTrapOpen, setIsTrapOpen] = useState(false);
+  const [playerCount, setPlayerCount] = useState(0);
 
   // Ref
-  const trapGroupRef = useRef<Mesh>(null);
-  const boxRef = useRef();
-  const groupRef = useRef<THREE.Group>(null);
+  const trapGroupRef = useRef<THREE.Group | null>(null);;
+  const boxRef = useRef<THREE.Mesh | null>(null);
+  const groupRef = useRef<THREE.Group | null>(null);
 
   // Texture
   const [
@@ -47,23 +49,25 @@ export default function Box({ box }: { box: string }) {
     document.body.style.cursor = "default";
   };
 
-  const toggleTrap = () => {
-    setIsTrapOpen(!isTrapOpen);
+  //   const toggleTrap = () => {
+  //     setIsTrapOpen(!isTrapOpen);
 
-    const opening = !isTrapOpen;
+  //     const opening = !isTrapOpen;
 
-    if (trapGroupRef.current) {
-      const targetRotationX = opening ? Math.PI / 2 : 0;
+  //     if (trapGroupRef.current) {
+  //       const targetRotationX = opening ? Math.PI / 2 : 0;
 
-      const ease = opening ? "elastic.out(1, 0.3)" : "power2.out";
+  //       const ease = opening ? "elastic.out(1, 0.3)" : "power2.out";
 
-      gsap.to(trapGroupRef.current.rotation, {
-        x: targetRotationX,
-        duration: opening ? 2 : 1,
-        ease: ease,
-      });
-    }
-  };
+  //       gsap.to(trapGroupRef.current.rotation, {
+  //         x: targetRotationX,
+  //         duration: opening ? 2 : 1,
+  //         ease: ease,
+  //       });
+  //     }
+  //   };
+
+  const selectTrap = () => {};
 
   const onHover = () => {
     if (groupRef.current) {
@@ -91,6 +95,19 @@ export default function Box({ box }: { box: string }) {
     }
   };
 
+  // Get Players
+  const { loading, error, execute, data } = useReadContract();
+
+  useEffect(() => {
+    const chosenTrap = box === "left" ? "Left" : "Right";
+
+    execute(`get${chosenTrap}Players`).then(() => {
+      if (data) {
+        setPlayerCount(data.length);
+      }
+    });
+  }, [execute, data]);
+
   return (
     <group
       ref={groupRef}
@@ -102,7 +119,7 @@ export default function Box({ box }: { box: string }) {
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         ref={boxRef}
-        onClick={toggleTrap}
+        // onClick={toggleTrap}
       >
         <boxGeometry args={[1.3, 1.3, 1.3, 10, 10]} />
         <meshStandardMaterial
@@ -120,6 +137,7 @@ export default function Box({ box }: { box: string }) {
           roughnessMap={roughnessMap}
           normalMap={normalMap}
         />
+        <Html position={[-0.2, 1, -0.2]}>{playerCount}/100</Html>
       </mesh>
       <group ref={trapGroupRef} position={[0, -0.655, -0.65]}>
         <mesh position={[0, 0, 0.65]} rotation={[Math.PI * 0.5, 0, 0]}>

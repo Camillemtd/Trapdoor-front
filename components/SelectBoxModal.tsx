@@ -36,7 +36,6 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
   const price = usePriceStore((state) => state.price);
 
   if (!isModalOpen) return null;
-  console.log(formatEther(price))
 
   const { loading, error, execute } = useWriteContract();
 

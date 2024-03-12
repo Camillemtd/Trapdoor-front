@@ -13,7 +13,6 @@ const FetchPrizePool = () => {
     execute("getCurrentPrizePool");
   }, [execute]);
 
-  // Ajouter un effet pour réagir aux changements de `data`
   useEffect(() => {
     if (data && !loading) {
       setPrice(data);

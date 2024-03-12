@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 // Store
 import { useModalStore } from "@/stores/useModalStore";
-import { usePriceStore } from '@/stores/usePriceStore'; 
+import { usePriceStore } from "@/stores/usePriceStore";
 
 // react-icons
 import { IoClose } from "react-icons/io5";
@@ -28,36 +28,26 @@ interface ModalProps {
 
 import { formatEther } from "viem";
 
-
-export default function SelectBoxModal({
-  title,
-  description,
-}: ModalProps) {
-
+export default function SelectBoxModal({ title, description }: ModalProps) {
   const { isModalOpen, setIsModalOpen } = useModalStore();
-  const selectBox = useModalStore(state => state.selectBox);
-  const price = usePriceStore(state => state.price);
+  const selectBox = useModalStore((state) => state.selectBox);
+  const price = usePriceStore((state) => state.price);
 
   if (!isModalOpen) return null;
 
   const { loading, error, execute } = useWriteContract();
 
-
   const handleChooseTrapdoor = async () => {
     try {
-		const choice = selectBox === "Left" ? "0" : "1";
-		const amount = formatEther(price);
-      // _choice est converti en un tableau car le hook attend un tableau d'arguments
-      // amount est le montant en ether à envoyer avec la transaction
-      const result = await execute('chooseTrapdoor', [choice], amount);
-      console.log('Transaction result:', result);
-      // Gérer le succès de la transaction ici
+      const choice = selectBox === "Left" ? "0" : "1";
+      const amount = formatEther(price);
+
+      const result = await execute("chooseTrapdoor", [choice], amount);
+      console.log("Transaction result:", result);
     } catch (error) {
-      console.error('Error executing chooseTrapdoor:', error);
-      // Gérer l'erreur ici
+      console.error("Error executing chooseTrapdoor:", error);
     }
   };
-
 
   return (
     <div className="bg-black text-white absolute z-40 h-full w-full flex justify-center items-center bg-opacity-50">
@@ -73,10 +63,15 @@ export default function SelectBoxModal({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="w-full bg-zinc-800 p-2 rounded-lg">{formatEther(price)} eth</div>
+          <div className="w-full bg-zinc-800 p-2 rounded-lg">
+            {formatEther(price)} eth
+          </div>
         </CardContent>
         <CardFooter>
-          <Button onClick={handleChooseTrapdoor} className="bg-white text-black hover:text-white w-full hover:bg-zinc-800">
+          <Button
+            onClick={handleChooseTrapdoor}
+            className="bg-white text-black hover:text-white w-full hover:bg-zinc-800"
+          >
             Buy a ticket
           </Button>
         </CardFooter>

@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import useReadContract from "@/hooks/useReadContract";
 import { usePriceStore } from "@/stores/usePriceStore";
 
-//Viem
-import { parseEther } from "viem";
 
 const FetchPrizePool = () => {
   const { data, execute, loading } = useReadContract();

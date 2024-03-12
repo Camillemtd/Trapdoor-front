@@ -24,6 +24,7 @@ export default function Box({ box }: { box: string }) {
   const setIsModalOpen = useModalStore((state) => state.setIsModalOpen);
   const setSelectBox = useModalStore((state) => state.setSelectBox);
 
+
   // Ref
   const trapGroupRef = useRef<THREE.Group | null>(null);;
   const boxRef = useRef<THREE.Mesh | null>(null);
@@ -108,18 +109,24 @@ export default function Box({ box }: { box: string }) {
   };
 
   // Get Players
+  const prevDataRef = useRef();
   const { loading, error, execute, data } = useReadContract();
 
   useEffect(() => {
     const chosenTrap = box === "left" ? "Left" : "Right";
+    execute(`get${chosenTrap}Players`);
+  }, []);
 
-    execute(`get${chosenTrap}Players`).then(() => {
+  useEffect(() => {
+    if (prevDataRef.current !== data) {
       if (data) {
         setPlayerCount(data.length);
+      } else {
+        setPlayerCount(0);
       }
-    });
-  }, [execute, box]);
-
+      prevDataRef.current = data;
+    }
+  }, [data]); 
   return (
     <group
       ref={groupRef}

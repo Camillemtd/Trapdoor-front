@@ -1,5 +1,7 @@
 "use client";
 
+import { PuffLoader } from "react-spinners";
+
 // Store
 import { useModalStore } from "@/stores/useModalStore";
 import { usePriceStore } from "@/stores/usePriceStore";
@@ -33,9 +35,12 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
   const selectBox = useModalStore((state) => state.selectBox);
   const price = usePriceStore((state) => state.price);
 
+
   if (!isModalOpen) return null;
 
   const { loading, error, execute } = useWriteContract();
+
+  const Loading = loading ? <PuffLoader color="#000000" size={30} /> : null;
 
   const handleChooseTrapdoor = async () => {
     try {
@@ -72,7 +77,7 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
             onClick={handleChooseTrapdoor}
             className="bg-white text-black hover:text-white w-full hover:bg-zinc-800"
           >
-            Buy a ticket
+            {loading ? Loading : ' Buy a Ticket'}
           </Button>
         </CardFooter>
       </Card>

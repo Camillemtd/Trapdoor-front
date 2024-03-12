@@ -8,13 +8,12 @@ const FetchPrizePool = () => {
   const setPrice = usePriceStore((state) => state.setPrice);
 
   useEffect(() => {
-    execute("getCurrentPrizePool");
+    execute("getTicketPriceInEth");
   }, [execute]);
 
   useEffect(() => {
     if (data && !loading) {
       setPrice(data);
-      console.log("Data mise à jour:", data);
     }
   }, [data, loading, setPrice]);
 

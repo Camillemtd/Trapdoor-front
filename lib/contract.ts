@@ -1,5 +1,5 @@
 export const TRAPDOOR_SEPOLIA_ADRESS =
-  "0xd9c59Bb54eecFB04717229aF8D4D99D4D5DC5d43";
+  "0x6eD890F42C2d67559F25050F88078fd1f3A4C7B6";
 
 export const TRAPDOOR_CONTRACT_ABI = [
   {
@@ -101,6 +101,19 @@ export const TRAPDOOR_CONTRACT_ABI = [
     inputs: [
       {
         indexed: true,
+        internalType: "uint256",
+        name: "trapdoorChoice",
+        type: "uint256",
+      },
+    ],
+    name: "TrapdoorOpened",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "enum Trapdoor.TrapdoorState",
         name: "newState",
         type: "uint8",
@@ -158,6 +171,13 @@ export const TRAPDOOR_CONTRACT_ABI = [
   },
   {
     inputs: [],
+    name: "getLastOpenedAt",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "getLastPrizeValue",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
@@ -197,16 +217,16 @@ export const TRAPDOOR_CONTRACT_ABI = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "_ethAmount", type: "uint256" }],
-    name: "getPriceInUsd",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    inputs: [],
+    name: "getRightPlayers",
+    outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "getRightPlayers",
-    outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
+    name: "getTicketPriceInEth",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
@@ -253,6 +273,15 @@ export const TRAPDOOR_CONTRACT_ABI = [
   {
     inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "_newInterval", type: "uint256" },
+    ],
+    name: "updateInterval",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -35,8 +35,8 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
   const selectBox = useModalStore((state) => state.selectBox);
   const price = usePriceStore((state) => state.price);
 
-
   if (!isModalOpen) return null;
+  console.log(formatEther(price))
 
   const { loading, error, execute } = useWriteContract();
 
@@ -46,6 +46,7 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
     try {
       const choice = selectBox === "Left" ? "0" : "1";
       const amount = formatEther(price);
+      
 
       const result = await execute("chooseTrapdoor", [choice], amount);
       console.log("Transaction result:", result);
@@ -55,8 +56,8 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
   };
 
   return (
-    <div className="bg-black text-white absolute z-40 h-full w-full flex justify-center items-center bg-opacity-50">
-      <Card className="bg-zinc-900 text-white relative pt-5">
+    <div className="bg-black text-white absolute z-40 h-full w-full flex justify-center items-center bg-opacity-50 ">
+      <Card className="bg-zinc-900 text-white relative pt-5 slide-in-top">
         <Button
           className="absolute right-0 top-0 bg-zinc-900 p-2 m-1"
           onClick={() => setIsModalOpen(false)}

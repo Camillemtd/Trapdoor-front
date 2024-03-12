@@ -1,3 +1,5 @@
+'use client';
+
 // React
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
@@ -8,12 +10,19 @@ import { DoubleSide } from "three";
 import * as THREE from "three";
 import { Vector3 } from "@react-three/fiber";
 
+// Hooks
 import useReadContract from "@/hooks/useReadContract";
+
+// Store
+import { useModalStore } from "@/stores/useModalStore";
 
 export default function Box({ box }: { box: string }) {
   // State
 //   const [isTrapOpen, setIsTrapOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(0);
+
+  const setIsModalOpen = useModalStore((state) => state.setIsModalOpen);
+  const setSelectBox = useModalStore((state) => state.setSelectBox);
 
   // Ref
   const trapGroupRef = useRef<THREE.Group | null>(null);;
@@ -67,7 +76,10 @@ export default function Box({ box }: { box: string }) {
   //     }
   //   };
 
-  const selectTrap = () => {};
+  const selectTrap = () => {
+	setIsModalOpen(true);
+	box === "left" ? setSelectBox("Left") : setSelectBox("Right");
+  };
 
   const onHover = () => {
     if (groupRef.current) {
@@ -106,7 +118,7 @@ export default function Box({ box }: { box: string }) {
         setPlayerCount(data.length);
       }
     });
-  }, [execute, data]);
+  }, [execute, box]);
 
   return (
     <group
@@ -119,7 +131,7 @@ export default function Box({ box }: { box: string }) {
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         ref={boxRef}
-        // onClick={toggleTrap}
+        onClick={selectTrap}
       >
         <boxGeometry args={[1.3, 1.3, 1.3, 10, 10]} />
         <meshStandardMaterial

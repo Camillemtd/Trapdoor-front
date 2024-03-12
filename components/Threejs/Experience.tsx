@@ -6,7 +6,7 @@ export default function Experience() {
 	  return (
 	<>
 		<PerspectiveCamera makeDefault position={[0, 0.8, 7.4]} />
-		<OrbitControls />
+		<OrbitControls enableZoom={false}/>
 		<directionalLight
                 color="#faedcd"
                 intensity={3}

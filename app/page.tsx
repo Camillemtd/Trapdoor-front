@@ -14,6 +14,7 @@ import { Canvas } from "@react-three/fiber";
 // Store
 import { useModalStore } from "@/stores/useModalStore";
 import CanvasLoader from "@/components/CanvasLoader";
+import RevealTrap from "@/components/RevealTrap";
 
 export default function Home() {
   const isModalOpen = useModalStore((state) => state.isModalOpen);
@@ -37,6 +38,7 @@ export default function Home() {
         />
       )}
       <FetchPrizePool />
+      {/* <RevealTrap/>                            */}
       <div className="h-full z-0 w-screen fixed top-0">
         <Canvas onCreated={handleCanvasLoaded}>
           <Experience />

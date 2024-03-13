@@ -77,7 +77,7 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
             onClick={handleChooseTrapdoor}
             className="bg-white text-black hover:text-white w-full hover:bg-zinc-800"
           >
-            {loading ? Loading : ' Buy a Ticket'}
+            {loading ? Loading : 'Buy a Ticket'}
           </Button>
         </CardFooter>
       </Card>

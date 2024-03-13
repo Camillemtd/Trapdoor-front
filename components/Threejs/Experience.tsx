@@ -11,8 +11,17 @@ import {
 } from "@react-three/drei";
 import Box from "./Box";
 import TimeTrap from "../TimeTrap";
+import { useThree } from "@react-three/fiber";
 export default function Experience() {
   const [matcapTexture] = useMatcapTexture("434240_D3D3CF_898784_A4A49F", 256);
+
+  const { viewport } = useThree();
+
+  const isMobile = window.innerWidth < 768;
+  const isTablet = window.innerWidth< 1024;
+
+  
+  
   return (
     <>
       <PerspectiveCamera makeDefault position={[0, 0.8, 7.4]} />

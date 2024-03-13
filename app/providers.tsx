@@ -17,21 +17,14 @@ import {
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
   sepolia
 } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
+import { alchemyProvider } from "@wagmi/core/providers/alchemy"
 
 const { chains, publicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, base, zora, sepolia],
-  [
-    publicProvider()
-  ]
-);
+  [mainnet, sepolia],
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" })]
+)
 
 if (!process.env.NEXT_PUBLIC_PROJECT_ID) {
   throw new Error("NEXT_PUBLIC_PROJECT_ID is not defined");

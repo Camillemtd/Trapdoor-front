@@ -31,8 +31,7 @@ interface ModalProps {
 import { formatEther } from "viem";
 
 export default function SelectBoxModal({ title, description }: ModalProps) {
-  const { isModalOpen, setIsModalOpen } = useModalStore();
-  const selectBox = useModalStore((state) => state.selectBox);
+  const { isModalOpen, setIsModalOpen, selectBox, setPlayerCountUpdated } = useModalStore();
   const price = usePriceStore((state) => state.price);
 
   if (!isModalOpen) return null;
@@ -48,6 +47,7 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
       
 
       const result = await execute("chooseTrapdoor", [choice], amount);
+      setPlayerCountUpdated(true);
       console.log("Transaction result:", result);
     } catch (error) {
       console.error("Error executing chooseTrapdoor:", error);

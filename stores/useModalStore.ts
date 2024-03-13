@@ -5,6 +5,8 @@ interface ModalState {
   setIsModalOpen: (isOpen: boolean) => void;
   selectBox: string;
   setSelectBox: (box: string) => void;
+  playerCountUpdated: boolean;
+  setPlayerCountUpdated: (updated: boolean) => void;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
@@ -12,4 +14,6 @@ export const useModalStore = create<ModalState>((set) => ({
   setIsModalOpen: (isOpen) => set({ isModalOpen: isOpen }),
   selectBox: '',
   setSelectBox: (box) => set({ selectBox: box }),
+  playerCountUpdated: false,
+  setPlayerCountUpdated: (updated) => set({ playerCountUpdated: updated }),
 }));

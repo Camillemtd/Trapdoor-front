@@ -38,7 +38,7 @@ export default function Home() {
         />
       )}
       <FetchPrizePool />
-      {/* <RevealTrap/>                            */}
+      {/* <RevealTrap/> */}
       <div className="h-full z-0 w-screen fixed top-0">
         <Canvas onCreated={handleCanvasLoaded}>
           <Experience />

@@ -22,6 +22,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 interface ModalProps {
   title: string;
@@ -40,6 +42,8 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
 
   const Loading = loading ? <PuffLoader color="#000000" size={30} /> : null;
 
+  const { toast } = useToast();
+
   const handleChooseTrapdoor = async () => {
     try {
       const choice = selectBox === "Left" ? "0" : "1";
@@ -49,8 +53,22 @@ export default function SelectBoxModal({ title, description }: ModalProps) {
       const result = await execute("chooseTrapdoor", [choice], amount);
       setPlayerCountUpdated(true);
       console.log("Transaction result:", result);
+      toast({
+        variant: "dark",
+        title: "Good Luck! ",
+        description: "You have successfully purchased your ticket.",
+        action: (
+          <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+        ),
+      })
     } catch (error) {
       console.error("Error executing chooseTrapdoor:", error);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
     }
   };
 

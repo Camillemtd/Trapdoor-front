@@ -4,11 +4,15 @@ import { useEffect, useState, useCallback } from "react";
 //Hooks
 import useReadContract from "@/hooks/useReadContract";
 
+// Components
+import BoxWinner from "./BoxWinner";
+
 //Threejs
 import { Text3D, useMatcapTexture, Center } from "@react-three/drei";
 
 // Store
 import { useModalStore } from "@/stores/useModalStore";
+import { useBoxWinnerStore } from "@/stores/useBoxWinnerStore";
 
 export default function TimeTrap() {
   // Hooks
@@ -24,6 +28,7 @@ export default function TimeTrap() {
   const setPlayerCountUpdated = useModalStore(
     (state) => state.setPlayerCountUpdated
   );
+  const setTimer = useBoxWinnerStore((state) => state.setTimer);
 
   const fetchLastOpenedAt = useCallback(() => {
     execute("getLastOpenedAt");
@@ -55,8 +60,8 @@ export default function TimeTrap() {
           const newTime = prevTime - 1000;
           if (newTime <= 0) {
             clearInterval(intervalId as NodeJS.Timeout);
-            fetchLastOpenedAt(); 
-            return 3600 * 1000; 
+            fetchLastOpenedAt();
+            return 3600 * 1000;
           }
           return newTime;
         });
@@ -74,7 +79,13 @@ export default function TimeTrap() {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  formatTime() === "0:00" && setPlayerCountUpdated(true);
+  useEffect(() => {
+    const formattedTime = formatTime();
+    // const formattedTime = "0:00"
+    setTimer(formattedTime);
+
+    formattedTime === "0:00" && setPlayerCountUpdated(true);
+  }, [timeUntilNextBox, setTimer, setPlayerCountUpdated]);
 
   return (
     <Center position={[-0.25, 1, 0]}>
@@ -91,6 +102,7 @@ export default function TimeTrap() {
       >
         {formatTime()}
         <meshMatcapMaterial matcap={matcapTexture} />
+        <BoxWinner time={formatTime()} />
       </Text3D>
     </Center>
   );

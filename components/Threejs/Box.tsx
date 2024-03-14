@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // React
 import { useState, useRef, useEffect } from "react";
@@ -15,18 +15,27 @@ import useReadContract from "@/hooks/useReadContract";
 
 // Store
 import { useModalStore } from "@/stores/useModalStore";
+import { useBoxWinnerStore } from "@/stores/useBoxWinnerStore";
 
-export default function Box({ box }: { box: string }) {
+interface BoxProps {
+  box: string;
+  boxNumber: number;
+}
+
+export default function Box({ box, boxNumber }: BoxProps) {
   // State
-//   const [isTrapOpen, setIsTrapOpen] = useState(false);
+  const [isTrapOpen, setIsTrapOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(0);
 
   const setIsModalOpen = useModalStore((state) => state.setIsModalOpen);
   const setSelectBox = useModalStore((state) => state.setSelectBox);
   const playerCountUpdated = useModalStore((state) => state.playerCountUpdated);
-  console.log(playerCountUpdated);
+  const boxWinner = useBoxWinnerStore((state) => state.boxWinner);
+  const timer = useBoxWinnerStore((state) => state.timer);
+  // console.log(boxWinner)
+
   // Ref
-  const trapGroupRef = useRef<THREE.Group | null>(null);;
+  const trapGroupRef = useRef<THREE.Group | null>(null);
   const boxRef = useRef<THREE.Mesh | null>(null);
   const groupRef = useRef<THREE.Group | null>(null);
 
@@ -59,27 +68,42 @@ export default function Box({ box }: { box: string }) {
     document.body.style.cursor = "default";
   };
 
-  //   const toggleTrap = () => {
-  //     setIsTrapOpen(!isTrapOpen);
+  const toggleTrap = () => {
+    setIsTrapOpen((prevIsTrapOpen) => {
+      const opening = !prevIsTrapOpen;
 
-  //     const opening = !isTrapOpen;
+      if (trapGroupRef.current) {
+        const targetRotationX = opening ? Math.PI / 2 : 0;
 
-  //     if (trapGroupRef.current) {
-  //       const targetRotationX = opening ? Math.PI / 2 : 0;
+        gsap.to(trapGroupRef.current.rotation, {
+          x: targetRotationX,
+          duration: opening ? 2 : 1,
+          ease: "elastic.out(1, 0.3)",
+        });
 
-  //       const ease = opening ? "elastic.out(1, 0.3)" : "power2.out";
+        if (opening) {
+          setTimeout(() => {
+            setIsTrapOpen((prevIsOpen) => {
+              if (prevIsOpen && trapGroupRef.current) {
+                gsap.to(trapGroupRef.current.rotation, {
+                  x: 0,
+                  duration: 2,
+                  ease: "power2.out",
+                });
+              }
+              return false;
+            });
+          }, 10000);
+        }
+      }
 
-  //       gsap.to(trapGroupRef.current.rotation, {
-  //         x: targetRotationX,
-  //         duration: opening ? 2 : 1,
-  //         ease: ease,
-  //       });
-  //     }
-  //   };
+      return !prevIsTrapOpen;
+    });
+  };
 
   const selectTrap = () => {
-	setIsModalOpen(true);
-	box === "left" ? setSelectBox("Left") : setSelectBox("Right");
+    setIsModalOpen(true);
+    box === "left" ? setSelectBox("Left") : setSelectBox("Right");
   };
 
   const onHover = () => {
@@ -126,7 +150,15 @@ export default function Box({ box }: { box: string }) {
       }
       prevDataRef.current = data;
     }
-  }, [data, playerCountUpdated]); 
+  }, [data, playerCountUpdated]);
+
+  // Update Box Winner
+  useEffect(() => {
+    if (timer === "0:00" && boxNumber !== boxWinner && !isTrapOpen) {
+      toggleTrap();
+    }
+  }, [timer]);
+
   return (
     <group
       ref={groupRef}

@@ -18,10 +18,8 @@ export default function Experience() {
   const { viewport } = useThree();
 
   const isMobile = window.innerWidth < 768;
-  const isTablet = window.innerWidth< 1024;
+  const isTablet = window.innerWidth < 1024;
 
-  
-  
   return (
     <>
       <PerspectiveCamera makeDefault position={[0, 0.8, 7.4]} />
@@ -33,7 +31,6 @@ export default function Experience() {
         castShadow
       />
       <ambientLight intensity={3} />
-
       <SpotLight
         position={[0, 5, 0]}
         intensity={7}
@@ -59,9 +56,9 @@ export default function Experience() {
           <meshMatcapMaterial matcap={matcapTexture} />
         </Text3D>
       </Center>
-	  <TimeTrap/>
-      <Box box={"left"} />
-      <Box box={"right"} />
+      <TimeTrap />
+      <Box box={"left"} boxNumber={0} />
+      <Box box={"right"} boxNumber={1} />
     </>
   );
 }

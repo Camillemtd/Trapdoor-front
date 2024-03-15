@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   OrbitControls,
   Environment,
@@ -11,18 +12,39 @@ import {
 } from "@react-three/drei";
 import Box from "./Box";
 import TimeTrap from "../TimeTrap";
-import { useThree } from "@react-three/fiber";
 export default function Experience() {
   const [matcapTexture] = useMatcapTexture("434240_D3D3CF_898784_A4A49F", 256);
 
-  const { viewport } = useThree();
+  function useResponsiveFOV() {
+    const [fov, setFov] = useState(() =>
+      window.innerWidth <= 768 ? 100 : window.innerWidth <= 1024 ? 82 : 75
+    );
 
-  const isMobile = window.innerWidth < 768;
-  const isTablet = window.innerWidth < 1024;
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth <= 768) {
+          setFov(100); // Mobile
+        } else if (window.innerWidth <= 1024) {
+          setFov(82); // Tablette
+        } else {
+          setFov(52); // Desktop
+        }
+      };
+
+      window.addEventListener("resize", handleResize);
+      handleResize(); 
+
+      return () => window.removeEventListener("resize", handleResize);
+    }, []); 
+
+    return fov;
+  }
+
+  const fov = useResponsiveFOV();
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0.8, 7.4]} />
+      <PerspectiveCamera makeDefault position={[0, 0.8, 7.4]} fov={fov} />
       <OrbitControls enableZoom={false} />
       <directionalLight
         color="#faedcd"

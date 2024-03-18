@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Components
 import Experience from "@/components/Threejs/Experience";
@@ -15,7 +15,10 @@ import { Canvas } from "@react-three/fiber";
 import { useModalStore } from "@/stores/useModalStore";
 import CanvasLoader from "@/components/CanvasLoader";
 import RevealTrap from "@/components/RevealTrap";
-import BoxWin from "@/components/BoxWinner";
+
+import { useAccount } from "wagmi";
+
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export default function Home() {
   const isModalOpen = useModalStore((state) => state.isModalOpen);
@@ -27,9 +30,22 @@ export default function Home() {
     setCanvasLoading(false);
   };
 
+  const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
+
+  useEffect(() => {
+    if (!address) {
+      openConnectModal?.();
+    }
+  }, [address, openConnectModal]);
+
+  if (!address) {
+    return <div className="w-screen h-screen flex justify-center items-center text-6xl">Please connect your wallet</div>;
+  }
+
   return (
     <div>
-      {canvasLoading && <CanvasLoader/>}
+      {canvasLoading && <CanvasLoader />}
       {isModalOpen && (
         <SelectBoxModal
           title={`You choose the ${selectBox} box`}
@@ -41,7 +57,7 @@ export default function Home() {
       <FetchPrizePool />
       {/* <RevealTrap/> */}
       <div className="h-full z-0 w-screen fixed top-0">
-        <Canvas onCreated={handleCanvasLoaded} >
+        <Canvas onCreated={handleCanvasLoaded}>
           <Experience />
         </Canvas>
       </div>

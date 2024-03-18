@@ -17,6 +17,7 @@ import useReadContract from "@/hooks/useReadContract";
 import { useModalStore } from "@/stores/useModalStore";
 import { useBoxWinnerStore } from "@/stores/useBoxWinnerStore";
 
+
 interface BoxProps {
   box: string;
   boxNumber: number;
@@ -57,6 +58,7 @@ export default function Box({ box, boxNumber }: BoxProps) {
     "./Texture/box_normal.jpg",
     "./Texture/box_roughness.jpg",
   ]);
+
 
   const boxPosition: Vector3 = box === "left" ? [-2, -0.5, 0] : [2, -0.5, 0];
 
